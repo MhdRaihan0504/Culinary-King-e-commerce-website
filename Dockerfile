@@ -1,10 +1,17 @@
-# Gunakan image Nginx sebagai base
-FROM nginx:alpine
+# Gunakan Python base image
+FROM python:3.9-alpine
 
-# Salin file HTML dan CSS ke direktori Nginx
-COPY . /usr/share/nginx/html
+# Tentukan direktori kerja di dalam container
+WORKDIR /app
 
-# Expose port 80
+# Salin semua file dari direktori proyek ke dalam container
+COPY . /app
+
+# Tambahkan variabel lingkungan PORT
+ENV PORT=8080
+
+# Ekspos port 8080 untuk digunakan oleh Cloud Run
 EXPOSE 8080
 
-# Nginx sudah otomatis berjalan ketika container dijalankan, jadi tidak perlu menambahkan CMD
+# Jalankan server HTTP Python pada port yang didefinisikan
+CMD ["sh", "-c", "python -m http.server ${PORT}"]
